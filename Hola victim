@@ -1,0 +1,204 @@
+local Library = loadstring(Game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
+
+local Window = Library:NewWindow("Etherbyte Hub")
+
+local hubTab = Window:NewSection("Etherbyte Hub")
+
+local farmTab = Window:NewSection("Farm Tab") -- Renamed Tab
+
+local isFarming = false -- Use a local variable for clarity
+local autoDropdownFarm = false
+local selectedNpc = "Bandit"  -- Default NPC
+
+-- Create a dropdown for selecting NPCs within farmTab
+farmTab:CreateDropdown("Select NPC", {
+    "Bandit",
+    "Monkey",
+    "Bandit Boss",
+    "Axe Hand Morang",
+    "Cursed Spirit",
+    "Desert Bandit",
+    "Desert Warrior",
+    "Elite Officer",
+    "Eneru",
+    "Freezer Soilder",
+    "Gojoh",
+    "Gorilla",
+    "Graa",
+    "Itadoru",
+    "King Gorilla",
+    "Lord Beeros",
+    "Marine Recruit",
+    "Marine Swordsman",
+    "Martial Artist",
+    "Nanamo",
+    "Naturo",
+    "Night Guy",
+    "Ninja",
+    "Ninja Genin",
+    "Ninja Trainee",
+    "Noob Fighter",
+    "Noob Officer",
+    "Orochiramu",
+    "Peeko",
+    "Pirate",
+    "Pirate Captain",
+    "Sabaman",
+    "Saian",
+    "Skypiean",
+    "Skypiean Guardian",
+    "Snow Officer",
+    "Son Oguk"
+}, 1, function(value)
+    -- Store the selected NPC
+    selectedNpc = value
+    print("Selected NPC: " .. selectedNpc)
+end)
+
+farmTab:CreateToggle("Enable Chosen NPC Farm", function(bool)
+    autoDropdownFarm = bool
+    if bool then
+        doautofarmDropdown()
+    end
+end)
+
+farmTab:CreateToggle("Enable farm(tp to every npc near u)!", function(bool)
+    isFarming = bool
+    if bool then
+        doautofarm()
+    end
+end)
+
+-- Function to autofarm nearest NPC
+function doautofarm()
+    while isFarming do
+        local Char = game.Players.LocalPlayer.Character
+        local nearestNPC = nil
+        local nearestDistance = math.huge
+
+        for _, child in ipairs(workspace["NPC's"]:GetChildren()) do
+            if child:IsA("Model") and child:FindFirstChild("HumanoidRootPart") and child:FindFirstChild("Humanoid") and child.Humanoid.Health > 0 then
+                local NpcHrp = child.HumanoidRootPart
+                local distance = (Char.HumanoidRootPart.Position - NpcHrp.Position).magnitude
+                if distance < nearestDistance then
+                    nearestNPC = child
+                    nearestDistance = distance
+                end
+            end
+        end
+
+        if nearestNPC then
+            if nearestDistance > 10 then
+                Char.HumanoidRootPart.CFrame = nearestNPC.HumanoidRootPart.CFrame
+            end
+        end
+        wait(0.1)
+    end
+end
+
+-- Function to autofarm using selected NPC from dropdown
+function doautofarmDropdown()
+    while autoDropdownFarm do
+        local Char = game.Players.LocalPlayer.Character
+        local foundNpc = false
+
+        for _, npc in ipairs(workspace["NPC's"]:GetChildren()) do
+            if npc:IsA("Model") and npc:FindFirstChild("HumanoidRootPart") and npc.Humanoid.Health > 0 then
+                if npc.Name == selectedNpc then
+                    -- Move to the selected NPC
+                    Char.HumanoidRootPart.CFrame = npc.HumanoidRootPart.CFrame
+                    foundNpc = true
+                    break
+                end
+            end
+        end
+
+        -- If no NPC with the selected name is found, find any valid NPC
+        if not foundNpc then
+            for _, npc in ipairs(workspace["NPC's"]:GetChildren()) do
+                if npc:IsA("Model") and npc:FindFirstChild("HumanoidRootPart") and npc.Humanoid.Health > 0 then
+                    -- Move to any valid NPC
+                    Char.HumanoidRootPart.CFrame = npc.HumanoidRootPart.CFrame
+                    foundNpc = true
+                    break
+                end
+            end
+        end
+        wait(0.1)
+    end
+end
+
+-- Adding buttons directly with scripts
+local teleportTab = Window:NewSection("Teleport")
+
+teleportTab:CreateButton("Dawn island", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-15.6183157, 0.245347008, -329.2052, -0.585310936, 0.00391013455, -0.810799479, 0.00131589861, 0.999991655, 0.00387258781, 0.810807824, 0.00119973824, -0.585311174)
+    wait()
+    print("Dawn island button pressed")
+end)
+
+teleportTab:CreateButton("Desert island", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1656.86951, -0.0427427292, 1732.35083, 0.701691926, 0, 0.712480485, 0, 1, 0, -0.712480485, 0, 0.701691926)
+    wait()
+    print("Desert island button pressed")
+end)
+
+teleportTab:CreateButton("Doflamingo island", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(4406.60059, 13.3766479, -6646.26025, 0.614195466, 0, 0.789153934, 0, 1, 0, -0.789153934, 0, 0.614195466)
+    wait()
+    print("Doflamingo island button pressed")
+end)
+
+teleportTab:CreateButton("Forest island", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(971.275452, -0.510741234, 3175.21997, 0.512057304, 0, 0.858951271, 0, 1, 0, -0.858951271, 0, 0.512057304)
+    wait()
+    print("Forest island button pressed")
+end)
+
+teleportTab:CreateButton("JJK island", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1634.95532, -1.04166985, 3367.53711, 0.605579495, -0, -0.795784831, 0, 1, -0, 0.795784831, 0, 0.605579495)
+    wait()
+    print("JJK island button pressed")
+end)
+
+teleportTab:CreateButton("Marine island", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1974.1947, -4.0326252, -2476.96997, 0.470710933, 0, 0.882287621, 0, 1, 0, -0.882287621, 0, 0.470710933)
+    wait()
+    print("Marine island button pressed")
+end)
+
+teleportTab:CreateButton("Snow island", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(4949.55859, 1.29931068, -3982.32349, -0.615635157, 0, -0.788031757, 0, 1, 0, 0.788031757, 0, -0.615635157)
+    wait()
+    print("Snow island button pressed")
+end)
+
+teleportTab:CreateButton("Floating building", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(6887.14111, 716.07666, -457.820343, 0.512057304, 0, 0.858951271, 0, 1, 0, -0.858951271, 0, 0.512057304)
+    wait()
+    print("Floating building button pressed")
+end)
+
+teleportTab:CreateButton("Hidden village", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(3088.63843, 13.0846157, -32.7385864, -0.54754436, 0, 0.836777091, 0, 1, 0, -0.836777091, 0, -0.54754436)
+    wait()
+    print("Hidden village button pressed")
+end)
+
+teleportTab:CreateButton("Shibuyo incident", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1965.39185, -4.25690889, -9603.23438, 0.104889452, -0.0013025353, -0.994483173, -0.000660932972, 0.999998808, -0.00137946918, 0.994483769, 0.000801978633, 0.104888499)
+    wait()
+    print("Shibuyo incident button pressed")
+end)
+
+teleportTab:CreateButton("Skypeia", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-3801.80884, 1381.07666, 1482.20959, 0.512057304, 0, 0.858951271, 0, 1, 0, -0.858951271, 0, 0.512057304)
+    wait()
+    print("Skypeia button pressed")
+end)
+
+teleportTab:CreateButton("West city", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(337.616058, 32.2365112, -6054.4917, -0.960307002, 0, -0.278945118, 0, 1, 0, 0.278945118, 0, -0.960307002)
+    wait()
+    print("West city button pressed")
+end)
