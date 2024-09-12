@@ -1,8 +1,8 @@
 local Library = loadstring(Game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
 
 local Window = Library:NewWindow("Etherbyte Hub")
+local teleportTab = Window:NewSection("Teleport")
 
-local hubTab = Window:NewSection("Etherbyte Hub")
 
 local farmTab = Window:NewSection("Farm Tab") -- Renamed Tab
 
@@ -129,7 +129,7 @@ function doautofarmDropdown()
 end
 
 -- Adding buttons directly with scripts
-local teleportTab = Window:NewSection("Teleport")
+
 
 teleportTab:CreateButton("Dawn island", function()
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-15.6183157, 0.245347008, -329.2052, -0.585310936, 0.00391013455, -0.810799479, 0.00131589861, 0.999991655, 0.00387258781, 0.810807824, 0.00119973824, -0.585311174)
@@ -154,6 +154,7 @@ teleportTab:CreateButton("Forest island", function()
     wait()
     print("Forest island button pressed")
 end)
+
 
 teleportTab:CreateButton("JJK island", function()
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1634.95532, -1.04166985, 3367.53711, 0.605579495, -0, -0.795784831, 0, 1, -0, 0.795784831, 0, 0.605579495)
@@ -183,9 +184,7 @@ teleportTab:CreateButton("Hidden village", function()
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(3088.63843, 13.0846157, -32.7385864, -0.54754436, 0, 0.836777091, 0, 1, 0, -0.836777091, 0, -0.54754436)
     wait()
     print("Hidden village button pressed")
-end)
-
-teleportTab:CreateButton("Shibuyo incident", function()
+end)teleportTab:CreateButton("Shibuyo incident", function()
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1965.39185, -4.25690889, -9603.23438, 0.104889452, -0.0013025353, -0.994483173, -0.000660932972, 0.999998808, -0.00137946918, 0.994483769, 0.000801978633, 0.104888499)
     wait()
     print("Shibuyo incident button pressed")
@@ -201,4 +200,120 @@ teleportTab:CreateButton("West city", function()
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(337.616058, 32.2365112, -6054.4917, -0.960307002, 0, -0.278945118, 0, 1, 0, 0.278945118, 0, -0.960307002)
     wait()
     print("West city button pressed")
+end)
+
+
+-- Variables
+local autoFarmChests = false
+local teleportToChestsThread
+
+-- Create a tab for chest farming
+local ChestTab = Window:NewSection("Chest Tab")
+
+
+-- Function to teleport to all chests in the workspace
+local function teleportToChests()
+    local rootpart = game.Players.LocalPlayer.Character.HumanoidRootPart
+
+    while autoFarmChests do
+        -- Loop through all children in the workspace
+        for _, v in pairs(workspace:GetChildren()) do
+            -- Check if the child is named "Chest" and is a BasePart (such as a physical object)
+            if v:IsA("BasePart") and v.Name == "Chest" then
+                -- Teleport the player's character to the chest's position
+                rootpart.CFrame = v.CFrame
+                wait(0.2)  -- Wait before teleporting to the next chest
+            end
+        end
+        wait(0.5)  -- Wait a bit before restarting the chest check
+    end
+end
+
+
+
+-- Toggle for auto farming chests
+ChestTab:CreateToggle("Auto Farm Chests", function(value)
+    autoFarmChests = value
+    if autoFarmChests then
+        -- Start the teleportToChests function when the toggle is enabled
+        teleportToChestsThread = spawn(teleportToChests)
+    else
+        -- Stop the teleportToChests function when the toggle is disabled
+        if teleportToChestsThread then
+            teleportToChestsThread:Kill()
+            teleportToChestsThread = nil
+        end
+    end
+end)  -- Add this closing parenthesis here --fruit Tab stuff
+
+-- ... (rest of the script remains the same)
+
+-- Create a tab for soul farming options
+local fruitTab = Window:NewSection("Soul")
+
+-- Variables
+local twentyFiveKsoul = false
+local oneTwentyFiveKsoul = false
+local twoFiftyKsoul = false
+
+-- Functions for fruit Tab
+function do25ksoul()
+    while twentyFiveKsoul do
+        local args = {
+            [1] = "SoulsDealer",
+            [2] = "G$25k 1 Soul"
+        }
+        
+        game:GetService("ReplicatedStorage").Game.Remotes.ServerHandler:FireServer(unpack(args))
+        
+        wait(3)
+    end
+end
+
+function do125ksoul()
+    while oneTwentyFiveKsoul do
+        local args = {
+            [1] = "SoulsDealer",
+            [2] = "G$125k 1 Soul"
+        }
+        
+        game:GetService("ReplicatedStorage").Game.Remotes.ServerHandler:FireServer(unpack(args))
+        
+        wait(3)
+    end
+end
+
+function do250ksoul()
+    while twoFiftyKsoul do
+        local args = {
+            [1] = "SoulsDealer",
+            [2] = "G$250k 1 Soul"
+        }
+        
+        game:GetService("ReplicatedStorage").Game.Remotes.ServerHandler:FireServer(unpack(args))
+        
+        wait(3)
+    end
+end
+
+-- Toggling functions
+fruitTab:CreateToggle("Auto open 25k soul!", function(bool)
+    twentyFiveKsoul = bool
+    if bool then
+        do25ksoul()
+    end
+end)
+
+fruitTab:CreateToggle("Auto open 125k soul!", function(bool)
+    oneTwentyFiveKsoul = bool
+    if bool then
+        do125ksoul()
+    end
+end)
+
+fruitTab:CreateToggle("Auto open 250k soul!", function(bool)
+    twoFiftyKsoul = bool
+    if bool then
+        do250ksoul()
+    end
 end)
